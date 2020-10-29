@@ -17,14 +17,21 @@ class SIForm extends StatefulWidget {
 
 class _SIFormState extends State<SIForm> {
   var _formKey = GlobalKey<FormState>();
-  var _currencies = ['Rupees', 'Dollars', 'Pounds', 'Others'];
+  var _timePeriod = ['1', '2', '3', '4'];
   final _minimumPadding = 5.0;
-  var _currentItemSelected = 'Rupees';
+  var _currentItemSelected = '1';
   TextEditingController principleController = TextEditingController();
+  TextEditingController principleControllers = TextEditingController();
   TextEditingController roiController = TextEditingController();
   TextEditingController termController = TextEditingController();
 
   var displayResult = '';
+
+  var displayResult2 = '';
+
+  var displayResult3 = '';
+
+  var displayResult4 = '';
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +58,33 @@ class _SIFormState extends State<SIForm> {
                       controller: principleController,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return "Please enter principle amount";
+                          return "Please enter showroom amount";
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Principle',
-                          hintText: 'Enter the Principle e.g. 12000',
+                          labelText: 'Showroom Price',
+                          hintText: 'Enter the Showroom Price e.g. 120000',
+                          labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                              color: Colors.deepPurple, fontSize: 15.0),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0))),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      style: textStyle,
+                      controller: principleControllers,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return "Please enter on road amount";
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'On Road Price',
+                          hintText: 'Enter the on road price e.g. 120000',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
                               color: Colors.deepPurple, fontSize: 15.0),
@@ -72,12 +100,12 @@ class _SIFormState extends State<SIForm> {
                       controller: roiController,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return "Please enter rate of interest";
+                          return "Please enter Down Payment";
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Rate of Interest',
-                          hintText: 'In percent e.g. 10%',
+                          labelText: 'Down Payment',
+                          hintText: 'enter down payment e.g. 10%',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
                               color: Colors.deepPurple, fontSize: 15.0),
@@ -96,12 +124,12 @@ class _SIFormState extends State<SIForm> {
                           controller: termController,
                           validator: (String value) {
                             if (value.isEmpty) {
-                              return 'Please enter term';
+                              return 'Please enter Interest rate';
                             }
                           },
                           decoration: InputDecoration(
-                              labelText: 'term',
-                              hintText: 'Time in Years',
+                              labelText: 'Total Interest',
+                              hintText: 'enter interest rate e.g. 10.00',
                               labelStyle: textStyle,
                               errorStyle: TextStyle(
                                   color: Colors.deepPurple, fontSize: 15.0),
@@ -113,7 +141,7 @@ class _SIFormState extends State<SIForm> {
                         ),
                         Expanded(
                             child: DropdownButton<String>(
-                                items: _currencies.map((String value) {
+                                items: _timePeriod.map((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Text(value),
@@ -141,6 +169,9 @@ class _SIFormState extends State<SIForm> {
                             if (_formKey.currentState.validate()) {}
                             setState(() {
                               this.displayResult = _calculateTotalReturns();
+                              this.displayResult2 = _calculateTotalReturns2();
+                              this.displayResult3 = _calculateTotalReturns3();
+                              this.displayResult4 = _calculateTotalReturns4();
                             });
                           },
                         )),
@@ -159,12 +190,37 @@ class _SIFormState extends State<SIForm> {
                       ],
                     )),
                 Padding(
-                  padding: EdgeInsets.all(_minimumPadding * 2),
-                  child: Text(
-                    this.displayResult,
-                    style: textStyle,
-                  ),
-                )
+                    padding: EdgeInsets.all(_minimumPadding * 2),
+                    child: Row(children: [
+                      Text(
+                        this.displayResult,
+                        style: textStyle,
+                      ),
+                    ])),
+                Padding(
+                    padding: EdgeInsets.all(_minimumPadding * 2),
+                    child: Row(children: [
+                      Text(
+                        this.displayResult2,
+                        style: textStyle,
+                      ),
+                    ])),
+                Padding(
+                    padding: EdgeInsets.all(_minimumPadding * 2),
+                    child: Row(children: [
+                      Text(
+                        this.displayResult3,
+                        style: textStyle,
+                      ),
+                    ])),
+                Padding(
+                    padding: EdgeInsets.all(_minimumPadding * 2),
+                    child: Row(children: [
+                      Text(
+                        this.displayResult4,
+                        style: textStyle,
+                      ),
+                    ]))
               ],
             ),
           )),
@@ -175,12 +231,12 @@ class _SIFormState extends State<SIForm> {
     AssetImage assetImage = AssetImage('images/cnw_logo.png');
     Image image = Image(
       image: assetImage,
-      width: 125.0,
-      height: 125.0,
+      width: 100.0,
+      height: 100.0,
     );
     return Container(
       child: image,
-      margin: EdgeInsets.all(_minimumPadding * 10.0),
+      margin: EdgeInsets.all(_minimumPadding),
     );
   }
 
@@ -191,21 +247,75 @@ class _SIFormState extends State<SIForm> {
   }
 
   String _calculateTotalReturns() {
-    double principle = double.parse(principleController.text);
-    double roi = double.parse(roiController.text);
-    double term = double.parse(termController.text);
+    int showroom = int.parse(principleController.text);
+    int onRoad = int.parse(principleControllers.text);
+    int downPay = int.parse(roiController.text);
+    double interest = double.parse(termController.text);
+    int ddi = int.parse(_currentItemSelected);
 
-    double totalAmountPayable = principle + (principle * roi * term) / 100;
+    var dueAmount = onRoad - downPay; //Loan amount
+    double emi = dueAmount / (ddi * 12); //EMi
+    double interestEmi = interest / 100 * emi; //per month interest
+    double totalInterest = interestEmi * (ddi * 12);
 
-    String result = '$totalAmountPayable $_currentItemSelected';
+    String result = '$dueAmount ///////// $totalInterest';
     return result;
+  }
+
+  String _calculateTotalReturns2() {
+    int showroom = int.parse(principleController.text);
+    int onRoad = int.parse(principleControllers.text);
+    int downPay = int.parse(roiController.text);
+    double interest = double.parse(termController.text);
+    int ddi = int.parse(_currentItemSelected);
+
+    var dueAmount = onRoad - downPay; //Loan amount
+    double emi = dueAmount / (ddi * 12); //EMi
+    double interestEmi = interest / 100 * emi; //per month interest
+    double totalInterest = interestEmi * (ddi * 12);
+
+    String result2 = '$totalInterest';
+    return result2;
+  }
+
+  String _calculateTotalReturns3() {
+    int showroom = int.parse(principleController.text);
+    int onRoad = int.parse(principleControllers.text);
+    int downPay = int.parse(roiController.text);
+    double interest = double.parse(termController.text);
+    int ddi = int.parse(_currentItemSelected);
+
+    var dueAmount = onRoad - downPay; //Loan amount
+    double emi = dueAmount / (ddi * 12); //EMi
+    double interestEmi = interest / 100 * emi; //per month interest
+    double totalInterest = interestEmi * (ddi * 12);
+
+    String result3 = '$interestEmi';
+    return result3;
+  }
+
+  String _calculateTotalReturns4() {
+    int showroom = int.parse(principleController.text);
+    int onRoad = int.parse(principleControllers.text);
+    int downPay = int.parse(roiController.text);
+    double interest = double.parse(termController.text);
+    int ddi = int.parse(_currentItemSelected);
+
+    var dueAmount = onRoad - downPay; //Loan amount
+    double emi = dueAmount / (ddi * 12); //EMi
+    double interestEmi = interest / 100 * emi; //per month interest
+    double totalInterest = interestEmi * (ddi * 12);
+
+    String result4 = '$emi //////// $interestEmi';
+    return result4;
   }
 
   void _reset() {
     principleController.text = '';
+    principleControllers.text = '';
     roiController.text = '';
     termController.text = '';
     displayResult = '';
-    _currentItemSelected = _currencies[0];
+    _currentItemSelected = _timePeriod[0];
   }
 }
