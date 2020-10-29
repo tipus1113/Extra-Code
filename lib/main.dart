@@ -189,38 +189,54 @@ class _SIFormState extends State<SIForm> {
                         ))
                       ],
                     )),
+                Expanded(
+                    child: Column(children: [
+                  Row(children: [
+                    Padding(
+                    padding: EdgeInsets.all(_minimumPadding),
+                    child: Text('amount and Interest')),
                 Padding(
-                    padding: EdgeInsets.all(_minimumPadding * 2),
-                    child: Row(children: [
-                      Text(
-                        this.displayResult,
-                        style: textStyle,
-                      ),
-                    ])),
-                Padding(
-                    padding: EdgeInsets.all(_minimumPadding * 2),
-                    child: Row(children: [
-                      Text(
+                    padding: EdgeInsets.all(_minimumPadding),
+                    child: Text(
+                      this.displayResult,
+                      style: textStyle,
+                    )),
+                  ]),
+                  Row(children: [
+                    Padding(
+                        padding: EdgeInsets.all(_minimumPadding),
+                        child: Text('amount and Interest')),
+                    Padding(
+                      padding: EdgeInsets.all(_minimumPadding),
+                      child: Text(
                         this.displayResult2,
                         style: textStyle,
                       ),
-                    ])),
-                Padding(
-                    padding: EdgeInsets.all(_minimumPadding * 2),
-                    child: Row(children: [
-                      Text(
-                        this.displayResult3,
-                        style: textStyle,
-                      ),
-                    ])),
-                Padding(
-                    padding: EdgeInsets.all(_minimumPadding * 2),
-                    child: Row(children: [
-                      Text(
-                        this.displayResult4,
-                        style: textStyle,
-                      ),
-                    ]))
+                    )
+                  ]),
+                  Row(children: [
+                    Padding(
+                        padding: EdgeInsets.all(_minimumPadding),
+                        child: Text('amount and Interest')),
+                    Padding(
+                        padding: EdgeInsets.all(_minimumPadding),
+                        child: Text(
+                          this.displayResult3,
+                          style: textStyle,
+                        )),
+                  ]),
+                  Row(children: [
+                    Padding(
+                        padding: EdgeInsets.all(_minimumPadding),
+                        child: Text('amount and Interest')),
+                    Padding(
+                        padding: EdgeInsets.all(_minimumPadding),
+                        child: Text(
+                          this.displayResult4,
+                          style: textStyle,
+                        )),
+                  ])
+                ]))
               ],
             ),
           )),
@@ -258,7 +274,7 @@ class _SIFormState extends State<SIForm> {
     double interestEmi = interest / 100 * emi; //per month interest
     double totalInterest = interestEmi * (ddi * 12);
 
-    String result = '$dueAmount ///////// $totalInterest';
+    String result = '$dueAmount and $totalInterest';
     return result;
   }
 
@@ -306,7 +322,7 @@ class _SIFormState extends State<SIForm> {
     double interestEmi = interest / 100 * emi; //per month interest
     double totalInterest = interestEmi * (ddi * 12);
 
-    String result4 = '$emi //////// $interestEmi';
+    String result4 = '$emi and $interestEmi';
     return result4;
   }
 
